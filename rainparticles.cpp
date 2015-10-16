@@ -152,9 +152,9 @@ void RainParticles::setActive(bool active)
     this->isActive = active;
 }
 
-QVector<data> RainParticles::attributes()
+QVector<data *> RainParticles::attributes()
 {
-    QVector<data> att;
+    QVector<data *> att;
     att.push_back(ResourceManager::FLOAT(&waterHeight));
     att.push_back(ResourceManager::FLOAT(&elapsed));
     att.push_back(ResourceManager::BOOL(&isActive));

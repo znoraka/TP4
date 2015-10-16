@@ -32,9 +32,9 @@ void Drought::setActive(bool active)
     this->isActive = active;
 }
 
-QVector<data> Drought::attributes()
+QVector<data *> Drought::attributes()
 {
-    QVector<data> att;
+    QVector<data *> att;
     att.push_back(ResourceManager::FLOAT(&yellow));
     att.push_back(ResourceManager::FLOAT(&snowHeight));
     att.push_back(ResourceManager::BOOL(&isActive));

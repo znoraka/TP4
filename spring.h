@@ -29,7 +29,7 @@ public:
     void draw(float delta);
     void setActive(bool active);
 
-    QVector<data> attributes();
+    QVector<data *> attributes();
 
 private:
     bool isActive;

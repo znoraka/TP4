@@ -29,6 +29,9 @@ GameWindow::GameWindow(Camera *camera, float framerate)
 
     cthread = new ClientThread();
     connect(cthread, SIGNAL(seasonChangeSignal()), this, SLOT(onSeasonChange()));
+
+    this->cursor = new QCursor(Qt::BlankCursor);
+    this->cursor2 = new QCursor(Qt::ArrowCursor);
 }
 
 void GameWindow::initialize()
@@ -42,11 +45,6 @@ void GameWindow::initialize()
     this->m_image = QImage(imagePath);
 
     this->vertices = initVertices(this->m_image.width(), this->m_image.height());
-
-    this->cursor = new QCursor(Qt::BlankCursor);
-    this->cursor2 = new QCursor(Qt::ArrowCursor);
-
-    //    this->setCursor(*cursor2);
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -188,7 +186,7 @@ void GameWindow::keyPressEvent(QKeyEvent *event)
         camera->scale(-0.10f, -0.10f, 0);
         break;
     case Qt::Key_Space:
-        this->serialize("/home/noe/Documents/dev/save.txt");
+        this->load("/home/noe/Documents/dev/save.txt");
         if(fill) {
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         } else {
@@ -236,13 +234,12 @@ QString GameWindow::serialize(QString localPath)
 {
     QString s;
     s +=
-            imagePath + ";" + ResourceManager::INT(&season).toString() + "\n" +
+            imagePath + ";" + ResourceManager::INT(&season)->toString() + "\n" +
             ResourceManager::serialize(camera->attributes()) + "\n" +
             ResourceManager::serialize(drought->attributes()) + "\n" +
             ResourceManager::serialize(rain->attributes()) + "\n" +
             ResourceManager::serialize(snow->attributes()) + "\n" +
             ResourceManager::serialize(spring->attributes()) + "\n";
-    s += serializeVertices();
 
     QFile file( localPath );
     if ( file.open(QIODevice::ReadWrite) )
@@ -252,6 +249,28 @@ QString GameWindow::serialize(QString localPath)
     }
 
     return s;
+}
+
+void GameWindow::load(QString filePath)
+{
+    QFile file( filePath );
+    if ( file.open(QIODevice::ReadWrite) )
+    {
+        QTextStream stream( &file );
+        QStringList list = stream.readAll().split("\n");
+
+        QStringList l = list.at(0).split(";");
+        this->imagePath = l.at(0);
+        qDebug() << "loaded image" << this->imagePath;
+        ResourceManager::assign(camera->attributes(), ResourceManager::parse(list.at(1)));
+        ResourceManager::assign(drought->attributes(), ResourceManager::parse(list.at(2)));
+        ResourceManager::assign(rain->attributes(), ResourceManager::parse(list.at(3)));
+        ResourceManager::assign(snow->attributes(), ResourceManager::parse(list.at(4)));
+        ResourceManager::assign(spring->attributes(), ResourceManager::parse(list.at(5)));
+
+
+        qDebug() << camera->getRotationX();
+    }
 }
 
 GLfloat *GameWindow::initVertices(GLint countX, GLint countY)

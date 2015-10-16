@@ -15,7 +15,7 @@ public:
     float getSnowHeightModifier() const;
     void setActive(bool active);
 
-    QVector<data> attributes();
+    QVector<data *> attributes();
 
 private:
     float yellow;

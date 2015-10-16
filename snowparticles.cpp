@@ -109,9 +109,9 @@ void SnowParticles::setActive(bool active)
     this->isActive = active;
 }
 
-QVector<data> SnowParticles::attributes()
+QVector<data *> SnowParticles::attributes()
 {
-    QVector<data> att;
+    QVector<data *> att;
     att.push_back(ResourceManager::INT(&width));
     att.push_back(ResourceManager::INT(&height));
     att.push_back(ResourceManager::BOOL(&isActive));

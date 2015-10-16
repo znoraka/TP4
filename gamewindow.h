@@ -40,6 +40,7 @@ public:
     void loadMap(QString localPath);
 
     QString serialize(QString localPath);
+    void load(QString filePath);
 
 public slots:
     void onSeasonChange();

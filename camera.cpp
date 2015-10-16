@@ -2,6 +2,7 @@
 
 Camera::Camera()
 {
+
 }
 
 void Camera::initialize(qreal ratio, qreal width, qreal height, qreal near, qreal far)
@@ -108,9 +109,9 @@ bool Camera::isCursorCaptured() const
     return this->cursorCaptured;
 }
 
-QVector<data> Camera::attributes()
+QVector<data *> Camera::attributes()
 {
-    QVector<data> att;
+    QVector<data *> att;
     att.push_back(ResourceManager::INT(&etat));
     att.push_back(ResourceManager::FLOAT(&rotX));
     att.push_back(ResourceManager::FLOAT(&rotY));

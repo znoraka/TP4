@@ -85,9 +85,9 @@ void Spring::setActive(bool active)
     this->isActive = active;
 }
 
-QVector<data> Spring::attributes()
+QVector<data *> Spring::attributes()
 {
-    QVector<data> att;
+    QVector<data *> att;
     att.push_back(ResourceManager::FLOAT(&elapsed));
     att.push_back(ResourceManager::FLOAT(&age));
     att.push_back(ResourceManager::BOOL(&isActive));

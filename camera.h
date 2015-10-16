@@ -4,13 +4,13 @@
 #include <QtGui/QWindow>
 #include <QtGui/QOpenGLFunctions>
 #include <QVector>
+#include <QDebug>
 #include "resourcemanager.h"
 
 class Camera
 {
 public:
     Camera();
-
 
     virtual void initialize(qreal ratio, qreal width, qreal height, qreal near, qreal far);
     void rotate(float x, float y, float z);
@@ -35,7 +35,7 @@ public:
     void setCursorCaptured(bool b);
     bool isCursorCaptured() const;
 
-    QVector<data> attributes();
+    QVector<data *> attributes();
 
 private:
     int etat = 0;

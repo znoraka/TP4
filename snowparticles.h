@@ -32,7 +32,7 @@ public:
     void reset();
     void setActive(bool active);
 
-    QVector<data> attributes();
+    QVector<data *> attributes();
 
  private:
     int width;
