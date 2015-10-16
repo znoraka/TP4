@@ -58,6 +58,7 @@ void GameWindow::initialize()
     drought = new Drought();
     spring = new Spring(&this->m_image);
     this->season = firstSeason++;
+    this->windowId = QString::number(this->season);
     this->onSeasonChange();
 }
 
@@ -88,6 +89,16 @@ void GameWindow::onSeasonChange()
         rain->setActive(false);
         snow->setActive(false);
     }
+}
+
+void GameWindow::onSaveRequest()
+{
+    this->serialize("/home/noe/Documents/dev/save" + this->windowId + ".txt");
+}
+
+void GameWindow::onLoadRequest()
+{
+    this->load("/home/noe/Documents/dev/save" + this->windowId + ".txt");
 }
 
 void GameWindow::render()
@@ -185,14 +196,17 @@ void GameWindow::keyPressEvent(QKeyEvent *event)
     case 'S':
         camera->scale(-0.10f, -0.10f, 0);
         break;
-    case Qt::Key_Space:
-        this->load("/home/noe/Documents/dev/save.txt");
-        if(fill) {
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        } else {
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        }
-        fill = !fill;
+    case Qt::Key_F5:
+        emit requestLoad();
+        //        if(fill) {
+        //            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        //        } else {
+        //            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        //        }
+        //        fill = !fill;
+        break;
+    case Qt::Key_F6:
+        emit requestSave();
         break;
     case 'W':
         etat ++;

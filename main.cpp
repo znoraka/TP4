@@ -18,8 +18,10 @@
 #include <QPushButton>
 #include <QApplication>
 #include <QWidget>
+#include <QObject>
 #include "camera.h"
 #include "serverthread.h"
+#include "controllerwindow.h"
 using namespace std;
 
 #define SERVER 1
@@ -30,22 +32,7 @@ using namespace std;
 #define WINTER "winter"
 #define SPRING "spring"
 
-class ControllerWindow : public QMainWindow {
-public:
-    ControllerWindow()
-    {
-        server = new ServerThread();
-        button = new QPushButton();
-        this->setCentralWidget(button);
-        button->setText("Change season");
-        button->resize(100, 60);
-        connect(button, SIGNAL(clicked()), server, SLOT(onSeasonChangeRequest()));
-    }
 
-private:
-    ServerThread *server;
-    QPushButton *button;
-};
 
 GameWindow *createWindow(Camera* camera, float framerate) {
     QSurfaceFormat format;
@@ -73,12 +60,35 @@ int main(int argc, char **argv)
     Camera *c = new Camera();
     GameWindow *g = createWindow(c, 1.0f / 60.0f);
     g->setPosition(120, 10);
+
+    QObject::connect(g, SIGNAL(requestLoad()), &window, SLOT(onLoadRequest()));
+    QObject::connect(g, SIGNAL(requestSave()), &window, SLOT(onSaveRequest()));
+    QObject::connect(&window, SIGNAL(requestLoad()), g, SLOT(onLoadRequest()));
+    QObject::connect(&window, SIGNAL(requestSave()), g, SLOT(onSaveRequest()));
+
     g = createWindow(c, 1.0f / 60.0f);
     g->setPosition(640, 10);
+
+    QObject::connect(g, SIGNAL(requestLoad()), &window, SLOT(onLoadRequest()));
+    QObject::connect(g, SIGNAL(requestSave()), &window, SLOT(onSaveRequest()));
+    QObject::connect(&window, SIGNAL(requestLoad()), g, SLOT(onLoadRequest()));
+    QObject::connect(&window, SIGNAL(requestSave()), g, SLOT(onSaveRequest()));
+
     g = createWindow(c, 1.0f / 60.0f);
     g->setPosition(640, 400);
+
+    QObject::connect(g, SIGNAL(requestLoad()), &window, SLOT(onLoadRequest()));
+    QObject::connect(g, SIGNAL(requestSave()), &window, SLOT(onSaveRequest()));
+    QObject::connect(&window, SIGNAL(requestLoad()), g, SLOT(onLoadRequest()));
+    QObject::connect(&window, SIGNAL(requestSave()), g, SLOT(onSaveRequest()));
+
     g = createWindow(c, 1.0f / 60.0f);
     g->setPosition(120, 400);
+
+    QObject::connect(g, SIGNAL(requestLoad()), &window, SLOT(onLoadRequest()));
+    QObject::connect(g, SIGNAL(requestSave()), &window, SLOT(onSaveRequest()));
+    QObject::connect(&window, SIGNAL(requestLoad()), g, SLOT(onLoadRequest()));
+    QObject::connect(&window, SIGNAL(requestSave()), g, SLOT(onSaveRequest()));
 
     return app.exec();
 }

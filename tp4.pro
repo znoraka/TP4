@@ -10,7 +10,8 @@ SOURCES += $$PWD/openglwindow.cpp \
     drought.cpp \
     utils.cpp \
     spring.cpp \
-    resourcemanager.cpp
+    resourcemanager.cpp \
+    controllerwindow.cpp
 HEADERS += $$PWD/openglwindow.h \
     gamewindow.h \
     camera.h \
@@ -22,7 +23,8 @@ HEADERS += $$PWD/openglwindow.h \
     drought.h \
     utils.h \
     spring.h \
-    resourcemanager.h
+    resourcemanager.h \
+    controllerwindow.h
 
 SOURCES += \
     main.cpp

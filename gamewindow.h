@@ -44,6 +44,12 @@ public:
 
 public slots:
     void onSeasonChange();
+    void onSaveRequest();
+    void onLoadRequest();
+
+signals:
+    void requestSave();
+    void requestLoad();
 
 private:
     GLfloat *initVertices(GLint countX, GLint county);
@@ -69,6 +75,8 @@ private:
     RainParticles *rain;
     Drought *drought;
     Spring *spring;
+
+    QString windowId;
 
     int carte=1;
 
