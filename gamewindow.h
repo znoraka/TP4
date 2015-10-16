@@ -39,7 +39,7 @@ public:
 
     void loadMap(QString localPath);
 
-    QString serialize();
+    QString serialize(QString localPath);
 
 public slots:
     void onSeasonChange();
@@ -48,6 +48,8 @@ private:
     GLfloat *initVertices(GLint countX, GLint county);
     GLfloat getRandomZ(float x, float y);
     GLuint loadShader(GLenum type, const char *source);
+
+    QString serializeVertices() const;
 
     int m_frame;
     QImage m_image;

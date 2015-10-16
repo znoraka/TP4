@@ -40,7 +40,6 @@ void GameWindow::initialize()
 
     imagePath = ":/heightmap-1.png";
     this->m_image = QImage(imagePath);
-    qDebug() << this->m_image.width();
 
     this->vertices = initVertices(this->m_image.width(), this->m_image.height());
 
@@ -91,7 +90,6 @@ void GameWindow::onSeasonChange()
         rain->setActive(false);
         snow->setActive(false);
     }
-    qDebug() << this->serialize();
 }
 
 void GameWindow::render()
@@ -186,7 +184,11 @@ void GameWindow::keyPressEvent(QKeyEvent *event)
     case 'Z':
         camera->scale(0.10f, 0.10f, 0);
         break;
+    case 'S':
+        camera->scale(-0.10f, -0.10f, 0);
+        break;
     case Qt::Key_Space:
+        this->serialize("/home/noe/Documents/dev/save.txt");
         if(fill) {
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         } else {
@@ -230,16 +232,25 @@ void GameWindow::drawTriangles()
     glEnd();
 }
 
-QString GameWindow::serialize()
+QString GameWindow::serialize(QString localPath)
 {
     QString s;
     s +=
-            imagePath + "\n" +
+            imagePath + ";" + ResourceManager::INT(&season).toString() + "\n" +
             ResourceManager::serialize(camera->attributes()) + "\n" +
             ResourceManager::serialize(drought->attributes()) + "\n" +
             ResourceManager::serialize(rain->attributes()) + "\n" +
             ResourceManager::serialize(snow->attributes()) + "\n" +
             ResourceManager::serialize(spring->attributes()) + "\n";
+    s += serializeVertices();
+
+    QFile file( localPath );
+    if ( file.open(QIODevice::ReadWrite) )
+    {
+        QTextStream stream( &file );
+        stream << s << endl;
+    }
+
     return s;
 }
 
@@ -301,6 +312,28 @@ GLfloat *GameWindow::initVertices(GLint countX, GLint countY)
         normals.push_back(p);
     }
     return array;
+}
+
+QString GameWindow::serializeVertices() const
+{
+    int countX = m_image.width();
+    int countY = m_image.height();
+    int count = countX * countY * 3 * 2 + countX * 3 + 3;
+
+    QString s = "";
+
+    for (int i = 0; i < count; ++i) {
+        s += QString::number(vertices[i]) + ";";
+    }
+
+    s += "\n";
+
+    for (int i = 0; i < normals.size(); ++i) {
+        s += QString::number(normals[i]->x) + ";";
+        s += QString::number(normals[i]->y) + ";";
+        s += QString::number(normals[i]->z) + ";";
+    }
+    return s;
 }
 
 float GameWindow::getRandomZ(float i, float j)

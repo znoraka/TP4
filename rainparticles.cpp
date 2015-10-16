@@ -15,11 +15,11 @@ void RainParticles::update(float delta)
 {
     float f = 0.1;
 
-    if(qrand() % 1000 < 100) {
+    if(lightningX == -2 && qrand() % 1000 < 100) {
         lightningX = ((qrand() % 100) - 50) * 0.01;
         lightningY = ((qrand() % 100) - 50) * 0.01;
     }
-    if(qrand() % 1000 > 700) {
+    if(qrand() % 1000 > 800) {
         lightningX = -2;
         lightningY = -2;
     }
@@ -72,6 +72,17 @@ void RainParticles::draw(float delta)
 
     if(isActive) {
         if(lightningX > -2) {
+
+            glEnable(GL_LIGHT1);
+            float LightPos[4] = {lightningX, lightningY,0.7,1};
+            glLightfv(GL_LIGHT1,GL_POSITION,LightPos);
+            float LightDif[4] = {1,1,1.f,1.f};
+            glLightfv(GL_LIGHT1,GL_DIFFUSE,LightDif);
+
+//            glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 2.0);
+//            glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 1.0);
+//            glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 3);
+
             glColor3f(1, 1, 1);
             glBegin(GL_LINE_STRIP);
             float f1, f2, f3;
@@ -84,6 +95,8 @@ void RainParticles::draw(float delta)
             glVertex3f(lightningX, lightningY, 0);
             //    glVertex3f(0.5, 0.5, 1);
             glEnd();
+        } else {
+            glDisable(GL_LIGHT1);
         }
     }
 
