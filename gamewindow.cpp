@@ -93,12 +93,12 @@ void GameWindow::onSeasonChange()
 
 void GameWindow::onSaveRequest()
 {
-    this->serialize("/home/noe/Documents/dev/save" + this->windowId + ".txt");
+    this->serialize("../save" + this->windowId + ".txt");
 }
 
 void GameWindow::onLoadRequest()
 {
-    this->load("/home/noe/Documents/dev/save" + this->windowId + ".txt");
+    this->load("../save" + this->windowId + ".txt");
 }
 
 void GameWindow::render()

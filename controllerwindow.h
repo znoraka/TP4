@@ -24,11 +24,12 @@ public slots:
     void onSaveRequest()
     {
         qDebug() << "sending save request";
-        emit requestLoad();
+        emit requestSave();
     }
     void onLoadRequest()
     {
-        emit requestSave();
+        qDebug() << "sending load request";
+        emit requestLoad();
     }
 
 signals:
