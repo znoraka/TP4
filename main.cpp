@@ -1,9 +1,10 @@
-#include "trianglewindow.h"
+#include "gamewindow.h"
 
 #include <QtGui/QGuiApplication>
 #include <QtGui/QMatrix4x4>
 #include <QtGui/QOpenGLShaderProgram>
 #include <QtGui/QScreen>
+#include <QMainWindow>
 
 #include <QtCore/qmath.h>
 #include <QMouseEvent>
@@ -14,46 +15,73 @@
 
 #include <QtCore>
 #include <QtGui>
-
-//#include <omp.h>
-
+#include <QPushButton>
+#include <QApplication>
+#include <QWidget>
+#include "camera.h"
+#include "serverthread.h"
 using namespace std;
+
+#define SERVER 1
+#define CLIENT 0
+
+#define SUMMER "summer"
+#define AUTUMN "autumn"
+#define WINTER "winter"
+#define SPRING "spring"
+
+class ControllerWindow : public QMainWindow {
+public:
+    ControllerWindow()
+    {
+        server = new ServerThread();
+        button = new QPushButton();
+        this->setCentralWidget(button);
+        button->setText("Change season");
+        button->resize(100, 60);
+        connect(button, SIGNAL(clicked()), server, SLOT(onSeasonChangeRequest()));
+    }
+
+private:
+    ServerThread *server;
+    QPushButton *button;
+};
+
+GameWindow *createWindow(Camera* camera, float framerate) {
+    QSurfaceFormat format;
+    format.setSamples(16);
+
+    GameWindow *w = new GameWindow(camera, framerate);
+    w->setFormat(format);
+    w->resize(480, 300);
+    w->show();
+    w->setAnimating(true);
+    return w;
+}
 
 
 int main(int argc, char **argv)
 {
     srand(time(NULL));
-    QGuiApplication app(argc, argv);
-    
-    QSurfaceFormat format;
-    format.setSamples(16);
-    
-    paramCamera* c=new paramCamera();
-    
-    QTimer* calendar = new QTimer;
+    QApplication app(argc, argv);
 
-    TriangleWindow* window[4];
-    for(int i = 0; i < 4; i++)
-    {
-        if (i == 0)
-            window[i] = new TriangleWindow();
-        else
-            window[i] = new TriangleWindow(30);
-        window[i]->setSeason(i);
-        window[i]->c = c;
-        window[i]->setFormat(format);
-        window[i]->resize(500,375);
-        int x = i%2;
-        int y = i>>1;
-                
-        window[i]->setPosition(x*500,y*450);
-        window[i]->show();
+    ControllerWindow window;
+    window.show();
+    window.resize(200, 120);
+    window.move(1100, 400);
 
-        calendar->connect(calendar, SIGNAL(timeout()),window[i], SLOT(updateSeason()));
-    }
-    
-    calendar->start(20);
+    Camera *c = new Camera();
+    GameWindow *g = createWindow(c, 1.0f / 60.0f);
+    g->setPosition(120, 10);
+    g = createWindow(c, 1.0f / 60.0f);
+    g->setPosition(640, 10);
+    g = createWindow(c, 1.0f / 60.0f);
+    g->setPosition(640, 400);
+    g = createWindow(c, 1.0f / 60.0f);
+    g->setPosition(120, 400);
 
     return app.exec();
 }
+
+
 
