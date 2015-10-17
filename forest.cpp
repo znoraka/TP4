@@ -3,7 +3,7 @@
 Forest::Forest(QImage *image, int treeCount)
 {
     this->image = image;
-    PlyEntity *target = PlyEntity::load("../TP4/c_autumntree.ply");
+    PlyEntity *target = PlyEntity::load(":/c_autumntree.ply");
 
     //entities.push_back(target);
 

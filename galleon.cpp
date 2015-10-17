@@ -2,7 +2,7 @@
 
 Galleon::Galleon(QImage *image)
 {
-    this->entity = PlyEntity::load("../TP4/galleon.ply");
+    this->entity = PlyEntity::load(":/galleon.ply");
     this->entity->setScale(0.0001f);
     this->speed = 0.05f;
     this->angle = qrand() % 360;

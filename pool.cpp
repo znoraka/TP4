@@ -25,7 +25,7 @@ template<typename T>
 void Pool<T>::release(T object)
 {
     if(!objects.contains(object)) {
-        qDebug() << "released object of type" << typeid(T).name();
+//        qDebug() << "released object of type" << typeid(T).name();
         objects.push(object);
     }
 }

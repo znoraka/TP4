@@ -46,9 +46,9 @@ void GameWindow::initialize()
 
     this->vertices = initVertices(this->m_image.width(), this->m_image.height());
 
-    entity = PlyEntity::load("../TP4/c_autumntree.ply");
-    entity->setPosition(0, 0, qGray(this->m_image.pixel((this->m_image.width() * (0 + 0.5f)), (this->m_image.height() * (0 + 0.5f)))) * 0.0008f);
-    entity->setScale(0.01f);
+//    entity = PlyEntity::load("../TP4/c_autumntree.ply");
+//    entity->setPosition(0, 0, qGray(this->m_image.pixel((this->m_image.width() * (0 + 0.5f)), (this->m_image.height() * (0 + 0.5f)))) * 0.0008f);
+//    entity->setScale(0.01f);
 
     forest = new Forest(&m_image, 10);
 

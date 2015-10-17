@@ -3,13 +3,16 @@
 PlyEntity *PlyEntity::load(QString filePath)
 {
     QFile file( filePath );
-    if(file.size() < 10) return nullptr;
-    if ( file.open(QIODevice::ReadWrite) )
+    if(file.size() < 10) {
+        qDebug() << "file not found : " << filePath;
+        return nullptr;
+    }
+    if ( file.open(QIODevice::ReadOnly) )
     {
         QTextStream stream( &file );
         return new PlyEntity(stream.readAll().split("\n"));
     }
-
+    qDebug() << "could not create entity";
 }
 
 PlyEntity *PlyEntity::copy(PlyEntity *entity)
@@ -17,6 +20,7 @@ PlyEntity *PlyEntity::copy(PlyEntity *entity)
     PlyEntity *newEntity = new PlyEntity();
     newEntity->indexes = entity->indexes;
     newEntity->vertices = entity->vertices;
+    return newEntity;
 }
 
 void PlyEntity::draw(float delta)
@@ -91,8 +95,8 @@ float PlyEntity::getAngle() const
 
 PlyEntity::PlyEntity(QStringList list)
 {
-    this->scale = 1;
     qDebug() << list.at(0);
+    this->scale = 1;
     if(!list.at(0).contains("ply")) {
         qDebug() << "bad file";
         return;
