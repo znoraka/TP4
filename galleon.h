@@ -19,6 +19,8 @@ private:
     float angle;
     float waterHeight;
     QImage *image;
+    float elapsed;
+    bool animated;
 };
 
 #endif // GALLEON_H

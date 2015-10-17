@@ -16,7 +16,6 @@ void PlyEntity::draw(float delta)
 {
     glPushMatrix();
     glTranslatef(x, y, z);
-    qDebug() << angle;
     glRotatef(angle, 0, 0, 1);
     glColor3f(1, 1, 1);
     for (int i = 0; i < indexes.size(); ++i) {
