@@ -9,6 +9,7 @@ RainParticles::RainParticles(QImage *image)
     this->waterHeight = 0.0;
     this->elapsed = 0;
     this->isActive = false;
+    this->galleon = new Galleon(image);
 }
 
 void RainParticles::update(float delta)
@@ -23,6 +24,9 @@ void RainParticles::update(float delta)
         lightningX = -2;
         lightningY = -2;
     }
+
+    this->galleon->setWaterHeight(waterHeight);
+    this->galleon->update(delta);
 
 #pragma omp parallel for
     for (int i = 0; i < rainDrops.size(); ++i) {
@@ -98,6 +102,7 @@ void RainParticles::draw(float delta)
         } else {
             glDisable(GL_LIGHT1);
         }
+        this->galleon->draw();
     }
 
     if(waterHeight > 0.000) {

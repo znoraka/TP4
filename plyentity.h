@@ -21,12 +21,20 @@ public:
     void update(float delta);
     void setPosition(float x, float y, float z);
     void setScale(float scale);
+    void setAngle(float angle);
+
+    float getX() const;
+    float getY() const;
+    float getZ() const;
+    float getAngle() const;
+
+protected:
+    PlyEntity(QStringList list);
 
 private:
-    PlyEntity(QStringList list);
     QVector<point> vertices;
     QVector<QVector<int>> indexes;
-    float x, y, z, scale;
+    float x, y, z, scale, angle;
 };
 
 #endif // PLYENTITY_H

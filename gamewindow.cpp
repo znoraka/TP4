@@ -46,9 +46,9 @@ void GameWindow::initialize()
 
     this->vertices = initVertices(this->m_image.width(), this->m_image.height());
 
-    entity = PlyEntity::load("../TP4/autumntree.ply");
+    entity = PlyEntity::load("../TP4/c_autumntree.ply");
     entity->setPosition(0, 0, qGray(this->m_image.pixel((this->m_image.width() * (0 + 0.5f)), (this->m_image.height() * (0 + 0.5f)))) * 0.0008f);
-    entity->setScale(0.02);
+    entity->setScale(0.0001f);
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -152,7 +152,7 @@ void GameWindow::render(float delta)
     spring->draw(delta);
     ++m_frame;
 
-    entity->draw(delta);
+    // entity->draw(delta);
 }
 
 bool GameWindow::event(QEvent *event)

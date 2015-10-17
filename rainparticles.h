@@ -12,6 +12,7 @@
 #include "pool.cpp"
 #include "utils.h"
 #include "resourcemanager.h"
+#include "galleon.h"
 
 class RainDrop {
     friend class Pool<RainDrop *>;
@@ -44,6 +45,7 @@ private:
     float elapsed;
     bool isActive;
     float lightningX, lightningY;
+    Galleon *galleon;
 
     RainDrop *createRainDrops(RainDrop *s);
 };

@@ -40,7 +40,7 @@ GameWindow *createWindow(Camera* camera, float framerate) {
 
     GameWindow *w = new GameWindow(camera, framerate);
     w->setFormat(format);
-    w->resize(480, 300);
+    w->resize(1366, 1024);
     w->show();
     w->setAnimating(true);
     return w;
