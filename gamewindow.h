@@ -13,6 +13,7 @@
 #include "spring.h"
 #include "utils.h"
 #include "resourcemanager.h"
+#include "plyentity.h"
 
 class GameWindow : public OpenGLWindow
 {
@@ -77,6 +78,7 @@ private:
     Spring *spring;
 
     QString windowId;
+    PlyEntity *entity;
 
     int carte=1;
 

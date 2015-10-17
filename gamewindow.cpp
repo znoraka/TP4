@@ -46,6 +46,10 @@ void GameWindow::initialize()
 
     this->vertices = initVertices(this->m_image.width(), this->m_image.height());
 
+    entity = PlyEntity::load("../TP4/autumntree.ply");
+    entity->setPosition(0, 0, qGray(this->m_image.pixel((this->m_image.width() * (0 + 0.5f)), (this->m_image.height() * (0 + 0.5f)))) * 0.0008f);
+    entity->setScale(0.02);
+
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
     glEnable(GL_COLOR_MATERIAL);
@@ -129,7 +133,7 @@ void GameWindow::render(float delta)
     GLfloat ambientLight[] = { 0.2f, 0.2f, 0.2f, 1.0f };
     GLfloat diffuseLight[] = { 0.8f, 0.8f, 0.8, 1.0f };
     GLfloat specularLight[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-    GLfloat position[] = { -1.5f, 1.0f, -4.0f, 1.0f };
+    GLfloat position[] = { -0.5f, 0.5f, -4.0f, 0.0f };
 
     // Assign created components to GL_LIGHT0
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
@@ -147,6 +151,8 @@ void GameWindow::render(float delta)
     spring->update(delta);
     spring->draw(delta);
     ++m_frame;
+
+    entity->draw(delta);
 }
 
 bool GameWindow::event(QEvent *event)
@@ -268,6 +274,7 @@ QString GameWindow::serialize(QString localPath)
 void GameWindow::load(QString filePath)
 {
     QFile file( filePath );
+    if(file.size() < 3) return;
     if ( file.open(QIODevice::ReadWrite) )
     {
         QTextStream stream( &file );

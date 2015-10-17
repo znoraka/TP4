@@ -11,7 +11,8 @@ SOURCES += $$PWD/openglwindow.cpp \
     utils.cpp \
     spring.cpp \
     resourcemanager.cpp \
-    controllerwindow.cpp
+    controllerwindow.cpp \
+    plyentity.cpp
 HEADERS += $$PWD/openglwindow.h \
     gamewindow.h \
     camera.h \
@@ -24,7 +25,8 @@ HEADERS += $$PWD/openglwindow.h \
     utils.h \
     spring.h \
     resourcemanager.h \
-    controllerwindow.h
+    controllerwindow.h \
+    plyentity.h
 
 SOURCES += \
     main.cpp
