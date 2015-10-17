@@ -14,6 +14,7 @@
 #include "utils.h"
 #include "resourcemanager.h"
 #include "plyentity.h"
+#include "forest.h"
 
 class GameWindow : public OpenGLWindow
 {
@@ -79,6 +80,7 @@ private:
 
     QString windowId;
     PlyEntity *entity;
+    Forest *forest;
 
     int carte=1;
 

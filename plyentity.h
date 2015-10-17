@@ -17,6 +17,7 @@ class PlyEntity
 {
 public:
     static PlyEntity *load(QString filePath);
+    static PlyEntity *copy(PlyEntity *entity);
     void draw(float delta);
     void update(float delta);
     void setPosition(float x, float y, float z);
@@ -30,6 +31,7 @@ public:
 
 protected:
     PlyEntity(QStringList list);
+    PlyEntity();
 
 private:
     QVector<point> vertices;

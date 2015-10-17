@@ -48,7 +48,9 @@ void GameWindow::initialize()
 
     entity = PlyEntity::load("../TP4/c_autumntree.ply");
     entity->setPosition(0, 0, qGray(this->m_image.pixel((this->m_image.width() * (0 + 0.5f)), (this->m_image.height() * (0 + 0.5f)))) * 0.0008f);
-    entity->setScale(0.0001f);
+    entity->setScale(0.01f);
+
+    forest = new Forest(&m_image, 10);
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -152,7 +154,8 @@ void GameWindow::render(float delta)
     spring->draw(delta);
     ++m_frame;
 
-    // entity->draw(delta);
+    //entity->draw(delta);
+    forest->draw(delta);
 }
 
 bool GameWindow::event(QEvent *event)

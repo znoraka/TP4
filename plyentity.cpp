@@ -12,12 +12,21 @@ PlyEntity *PlyEntity::load(QString filePath)
 
 }
 
+PlyEntity *PlyEntity::copy(PlyEntity *entity)
+{
+    PlyEntity *newEntity = new PlyEntity();
+    newEntity->indexes = entity->indexes;
+    newEntity->vertices = entity->vertices;
+}
+
 void PlyEntity::draw(float delta)
 {
     glPushMatrix();
     glTranslatef(x, y, z);
     glRotatef(angle, 0, 0, 1);
     glColor3f(1, 1, 1);
+
+#pragma omp for schedule(dynamic)
     for (int i = 0; i < indexes.size(); ++i) {
         QVector<int> v = indexes[i];
         if(v.size() == 3) {
@@ -145,4 +154,13 @@ PlyEntity::PlyEntity(QStringList list)
         }
         indexes.push_back(v);
     }
+}
+
+PlyEntity::PlyEntity()
+{
+    this->scale = 1;
+    this->x = 0;
+    this->y = 0;
+    this->z = 0;
+    this->angle = 0;
 }
