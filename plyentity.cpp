@@ -2,6 +2,7 @@
 
 PlyEntity *PlyEntity::load(QString filePath)
 {
+    qDebug() << "loading " << filePath;
     QFile file( filePath );
     if(file.size() < 10) {
         qDebug() << "file not found : " << filePath;

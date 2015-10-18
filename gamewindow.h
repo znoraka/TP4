@@ -79,7 +79,7 @@ private:
     Spring *spring;
 
     QString windowId;
-//    PlyEntity *entity;
+    PlyEntity *entity;
     Forest *forest;
 
     int carte=1;

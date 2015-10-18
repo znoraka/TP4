@@ -14,7 +14,8 @@ SOURCES += $$PWD/openglwindow.cpp \
     controllerwindow.cpp \
     plyentity.cpp \
     galleon.cpp \
-    forest.cpp
+    forest.cpp \
+    birds.cpp
 HEADERS += $$PWD/openglwindow.h \
     gamewindow.h \
     camera.h \
@@ -30,7 +31,8 @@ HEADERS += $$PWD/openglwindow.h \
     controllerwindow.h \
     plyentity.h \
     galleon.h \
-    forest.h
+    forest.h \
+    birds.h
 
 SOURCES += \
     main.cpp
