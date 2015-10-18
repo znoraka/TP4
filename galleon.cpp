@@ -9,11 +9,14 @@ Galleon::Galleon(QImage *image)
     this->image = image;
     this->elapsed = 0;
     this->animated = false;
+    this->rotation = 1;
 }
 
 void Galleon::update(float delta)
 {
     elapsed += delta;
+    if(qrand() % 1000 < 5) rotation *= -1;
+
     int x1 = (this->entity->getX() + 0.5) * this->image->width();
     int y1 = (this->entity->getY() + 0.5) * this->image->height();
 
@@ -23,7 +26,7 @@ void Galleon::update(float delta)
         float y = sin(angle * 0.0174533f) * speed * delta;
 
         if(entity->getX() < -0.5 || entity->getY() < -0.5 || entity->getX() > 0.5 || entity->getY() > 0.5 || waterHeight - qGray(this->image->pixel(x1, y1)) * 0.0008 < 0.02) {
-            this->angle += 5;
+            this->angle += 5 * rotation;
             if(angle > 360) angle = 0;
         }
         this->entity->setAngle(angle + 90);

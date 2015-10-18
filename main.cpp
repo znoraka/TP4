@@ -19,6 +19,7 @@
 #include <QApplication>
 #include <QWidget>
 #include <QObject>
+#include <QThread>
 #include "camera.h"
 #include "serverthread.h"
 #include "controllerwindow.h"

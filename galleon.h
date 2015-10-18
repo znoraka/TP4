@@ -21,6 +21,7 @@ private:
     QImage *image;
     float elapsed;
     bool animated;
+    int rotation;
 };
 
 #endif // GALLEON_H

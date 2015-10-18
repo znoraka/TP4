@@ -265,7 +265,7 @@ QString GameWindow::serialize(QString localPath)
             ResourceManager::serialize(spring->attributes()) + "\n";
 
     QFile file( localPath );
-    if ( file.open(QIODevice::ReadWrite) )
+    if ( file.open(QIODevice::ReadWrite | QIODevice::Truncate) )
     {
         QTextStream stream( &file );
         stream << s << endl;
@@ -291,9 +291,6 @@ void GameWindow::load(QString filePath)
         ResourceManager::assign(rain->attributes(), ResourceManager::parse(list.at(3)));
         ResourceManager::assign(snow->attributes(), ResourceManager::parse(list.at(4)));
         ResourceManager::assign(spring->attributes(), ResourceManager::parse(list.at(5)));
-
-
-        qDebug() << camera->getRotationX();
     }
 }
 
