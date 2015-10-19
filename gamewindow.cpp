@@ -64,7 +64,7 @@ void GameWindow::initialize()
     drought = new Drought();
     spring = new Spring(&this->m_image);
     this->season = firstSeason++;
-    this->windowId = QString::number(this->season);
+    this->windowId = this->season;
     this->onSeasonChange();
 }
 
@@ -99,12 +99,12 @@ void GameWindow::onSeasonChange()
 
 void GameWindow::onSaveRequest()
 {
-    this->serialize("../save" + this->windowId + ".txt");
+    ResourceManager::setSave(this->serialize(), windowId);
 }
 
 void GameWindow::onLoadRequest()
 {
-    this->load("../save" + this->windowId + ".txt");
+    this->load();
 }
 
 void GameWindow::render()
@@ -254,7 +254,7 @@ void GameWindow::drawTriangles()
     glEnd();
 }
 
-QString GameWindow::serialize(QString localPath)
+QString GameWindow::serialize()
 {
     QString s;
     s +=
@@ -264,35 +264,22 @@ QString GameWindow::serialize(QString localPath)
             ResourceManager::serialize(rain->attributes()) + "\n" +
             ResourceManager::serialize(snow->attributes()) + "\n" +
             ResourceManager::serialize(spring->attributes()) + "\n";
-
-    QFile file( localPath );
-    if ( file.open(QIODevice::ReadWrite | QIODevice::Truncate) )
-    {
-        QTextStream stream( &file );
-        stream << s << endl;
-    }
-
     return s;
 }
 
-void GameWindow::load(QString filePath)
+void GameWindow::load()
 {
-    QFile file( filePath );
-    if(file.size() < 3) return;
-    if ( file.open(QIODevice::ReadWrite) )
-    {
-        QTextStream stream( &file );
-        QStringList list = stream.readAll().split("\n");
+    QString s = ResourceManager::getSave(windowId);
+    QStringList list = s.split("\n");
 
-        QStringList l = list.at(0).split(";");
-        this->imagePath = l.at(0);
-        qDebug() << "loaded image" << this->imagePath;
-        ResourceManager::assign(camera->attributes(), ResourceManager::parse(list.at(1)));
-        ResourceManager::assign(drought->attributes(), ResourceManager::parse(list.at(2)));
-        ResourceManager::assign(rain->attributes(), ResourceManager::parse(list.at(3)));
-        ResourceManager::assign(snow->attributes(), ResourceManager::parse(list.at(4)));
-        ResourceManager::assign(spring->attributes(), ResourceManager::parse(list.at(5)));
-    }
+    QStringList l = list.at(0).split(";");
+    this->imagePath = l.at(0);
+    qDebug() << "loaded image" << this->imagePath;
+    ResourceManager::assign(camera->attributes(), ResourceManager::parse(list.at(1)));
+    ResourceManager::assign(drought->attributes(), ResourceManager::parse(list.at(2)));
+    ResourceManager::assign(rain->attributes(), ResourceManager::parse(list.at(3)));
+    ResourceManager::assign(snow->attributes(), ResourceManager::parse(list.at(4)));
+    ResourceManager::assign(spring->attributes(), ResourceManager::parse(list.at(5)));
 }
 
 GLfloat *GameWindow::initVertices(GLint countX, GLint countY)

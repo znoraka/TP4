@@ -1,5 +1,8 @@
 #include "resourcemanager.h"
 
+QVector<QString> ResourceManager::toSaveSaves;
+QVector<QString> ResourceManager::loadedSaves;
+
 QString ResourceManager::serialize(QVector<data *> vec)
 {
     QString s = "";
@@ -16,7 +19,6 @@ QVector<data *> ResourceManager::parse(QString s)
     QStringList list = s.split(";");
     for (int i = 0; i < list.size(); ++i) {
         vec.push_back(dataFromType(list.at(i)));
-
     }
     return vec;
 }
@@ -77,6 +79,52 @@ data *ResourceManager::BOOL(bool *value)
     return d;
 }
 
+void ResourceManager::loadSave()
+{
+    QString filePath = "./save.dat";
+    QFile file( filePath );
+    if(file.size() < 3) return;
+    if ( file.open(QIODevice::ReadOnly) )
+    {
+        QDataStream stream( &file );
+        QString s;
+        forever {
+            stream >> s;
+            if (s.size() < 3) return;
+            loadedSaves.push_back(s);
+        }
+    }
+}
+
+QString ResourceManager::getSave(int saveIndex)
+{
+    return loadedSaves.at(saveIndex);
+}
+
+void ResourceManager::setSave(QString save, int saveIndex)
+{
+    qDebug() << "setting save";
+    toSaveSaves[saveIndex] = save;
+
+    for (int i = 0; i < toSaveSaves.size(); ++i) {
+        if(toSaveSaves[i].size() < 3) return;
+    }
+
+    saveSaves();
+    toSaveSaves.clear();
+    for (int i = 0; i < 4; ++i) {
+        toSaveSaves.push_back("");
+    }
+}
+
+void ResourceManager::init()
+{
+    for (int i = 0; i < 4; ++i) {
+        toSaveSaves.push_back("");
+    }
+    loadSave();
+}
+
 data *ResourceManager::dataFromType(QString s)
 {
     QStringList l = s.split(":");
@@ -92,5 +140,16 @@ data *ResourceManager::dataFromType(QString s)
         bool *f = new bool[1];
         f[0] = (l.at(1).compare("true") == 0) ? true : false;
         return BOOL(f);
+    }
+}
+
+void ResourceManager::saveSaves()
+{
+    QFile file("./save.dat");
+    file.open(QIODevice::WriteOnly);
+    QDataStream out(&file);   // we will serialize the data into the file
+    for (int i = 0; i < toSaveSaves.size(); ++i) {
+        qDebug() << toSaveSaves[i];
+        out << toSaveSaves[i];
     }
 }

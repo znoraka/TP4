@@ -20,9 +20,11 @@
 #include <QWidget>
 #include <QObject>
 #include <QThread>
+
 #include "camera.h"
 #include "serverthread.h"
 #include "controllerwindow.h"
+#include "resourcemanager.h"
 using namespace std;
 
 #define SERVER 1
@@ -52,6 +54,8 @@ int main(int argc, char **argv)
 {
     srand(time(NULL));
     QApplication app(argc, argv);
+
+    ResourceManager::init();
 
     ControllerWindow window;
     window.show();

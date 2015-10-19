@@ -41,8 +41,8 @@ public:
 
     void loadMap(QString localPath);
 
-    QString serialize(QString localPath);
-    void load(QString filePath);
+    QString serialize();
+    void load();
 
 public slots:
     void onSeasonChange();
@@ -78,7 +78,7 @@ private:
     Drought *drought;
     Spring *spring;
 
-    QString windowId;
+    int windowId;
     PlyEntity *entity;
     Forest *forest;
 
