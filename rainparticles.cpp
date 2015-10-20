@@ -83,9 +83,9 @@ void RainParticles::draw(float delta)
             float LightDif[4] = {1,1,1.f,1.f};
             glLightfv(GL_LIGHT1,GL_DIFFUSE,LightDif);
 
-//            glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 2.0);
-//            glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 1.0);
-//            glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 3);
+            //            glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 2.0);
+            //            glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 1.0);
+            //            glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 3);
 
             glColor3f(1, 1, 1);
             glBegin(GL_LINE_STRIP);
@@ -105,7 +105,7 @@ void RainParticles::draw(float delta)
         this->galleon->draw();
     }
 
-    if(waterHeight > 0.000) {
+    if(waterHeight > 0.0001) {
         glColor4f(0.2, 0.2, 1, 0.5);
         glBegin(GL_QUADS);
 #pragma omp for schedule(dynamic)
@@ -120,7 +120,7 @@ void RainParticles::draw(float delta)
                 p2.z = waterHeight + sin(i + 1 + elapsed + r) * 0.005 + cos(j + elapsed + r) * 0.005;
 
                 p3.x = (i + 1) * 0.01; p3.y = (j + 1) * 0.01;
-                p3.z = waterHeight + sin(i + 1 + elapsed + r) * 0.005 + cos(j + 1+ elapsed + r) * 0.005;
+                p3.z = waterHeight + sin(i + 1 + elapsed + r) * 0.005 + cos(j + 1 + elapsed + r) * 0.005;
 
                 p4.x = i * 0.01; p4.y = (j + 1) * 0.01;
                 p4.z = waterHeight + sin(i + elapsed + r) * 0.005 + cos(j + 1 + elapsed + r) * 0.005;
@@ -128,6 +128,8 @@ void RainParticles::draw(float delta)
                 float z = qGray(image->pixel((i + 50) * 240 * 0.01, (j + 50) * 240 * 0.01));
                 z *= 0.0008;
                 //                qDebug() << (i + 50) * 240 * 0.01;
+                std::vector<float> vec = Utils::getNormal(p1, p3, p2);
+                glNormal3f(vec[0], vec[1], vec[2]);
                 if(p1.z > z || p2.z > z || p3.z > z) {
                     glVertex3f(p1.x, p1.y, p1.z);
                     glVertex3f(p2.x, p2.y, p2.z);
@@ -135,8 +137,28 @@ void RainParticles::draw(float delta)
                     glVertex3f(p4.x, p4.y, p4.z);
                 }
 
-                std::vector<float> vec = Utils::getNormal(p1, p3, p2);
-                glNormal3f(vec[0], vec[1], vec[2]);
+                if(i == -50) {
+                    glVertex3f(-0.5, p3.y, z);
+                    glVertex3f(-0.5, p1.y, qGray(image->pixel(0, (fmax(j - 1 + 50, 0)) * 240 * 0.01)) * 0.0008);
+                    glVertex3f(-0.5, p1.y, p1.z);
+                    glVertex3f(-0.5, p3.y, p4.z);
+                } else if (i == 49) {
+                    glVertex3f(0.5, p3.y, p3.z);
+                    glVertex3f(0.5, p1.y, p2.z);
+                    glVertex3f(0.5, p1.y, z);
+                    glVertex3f(0.5, p3.y, z);
+                }
+                if(j == -50) {
+                    glVertex3f(p1.x, -0.5, z);
+                    glVertex3f(p3.x, -0.5, z);
+                    glVertex3f(p3.x, -0.5, p2.z);
+                    glVertex3f(p1.x, -0.5, p1.z);
+                } else if(j == 49) {
+                    glVertex3f(p1.x, 0.5, p4.z);
+                    glVertex3f(p3.x, 0.5, p3.z);
+                    glVertex3f(p3.x, 0.5, z);
+                    glVertex3f(p1.x, 0.5, z);
+                }
             }
         }
         glEnd();

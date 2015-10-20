@@ -58,6 +58,7 @@ void GameWindow::initialize()
     glEnable(GL_CULL_FACE);
     glEnable (GL_BLEND);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Active la correction de perspective (pour ombrage, texture, ...)
 
     snow = new SnowParticles(1000, 1000, &this->m_image);
     rain = new RainParticles(&this->m_image);
@@ -110,12 +111,6 @@ void GameWindow::onLoadRequest()
 
 void GameWindow::render()
 {
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
-    glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_CULL_FACE);
-    glEnable (GL_BLEND);
-    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     this->render((float) timer.interval() * 0.001f);
 }
 
@@ -127,7 +122,6 @@ void GameWindow::render(float delta)
     }
     this->camera->update(delta);
 
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Active la correction de perspective (pour ombrage, texture, ...)
 
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
@@ -204,6 +198,11 @@ void GameWindow::keyPressEvent(QKeyEvent *event)
         break;
     case Qt::Key_Space:
         displayNormals = !displayNormals;
+        if(displayNormals) {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        } else {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        }
         break;
     case 'Z':
         camera->scale(0.10f, 0.10f, 0);
@@ -213,11 +212,6 @@ void GameWindow::keyPressEvent(QKeyEvent *event)
         break;
     case Qt::Key_F5:
         emit requestLoad();
-        //        if(fill) {
-        //            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        //        } else {
-        //            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        //        }
         //        fill = !fill;
         break;
     case Qt::Key_F6:
@@ -238,7 +232,7 @@ void GameWindow::keyPressEvent(QKeyEvent *event)
 void GameWindow::drawTriangles()
 {
 
-    glMaterialf(GL_FRONT, GL_SHININESS, 10.0);
+    glMaterialf(GL_FRONT, GL_SHININESS, 100.0);
 
     int countX = m_image.width();
     int countY = m_image.height();
@@ -356,7 +350,11 @@ GLfloat *GameWindow::initVertices(GLint countX, GLint countY)
         n = Utils::getNormal(p1, p2, p3);
         p->x = n[0]; p->y = n[1]; p->z = n[2];
 
-        if(p->z < 0) p->z *= -1;
+        if(p->z < 0) {
+            p->x *= -1;
+            p->y *= -1;
+            p->z *= -1;
+        }
 
         normals.push_back(p);
     }

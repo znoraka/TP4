@@ -10,7 +10,7 @@ std::vector<float> Utils::getNormal(point t1, point t2, point t3) {
     n.z = v.x * w.y - v.y * w.x;
     float l = sqrt(pow(n.x, 2)) + sqrt(pow(n.y, 2)) + sqrt(pow(n.z, 2));
     if(l == 0) l = 1;
-    std::vector<float> res = {n.x / l, n.y / l, n.z / l};
+    std::vector<float> res = {n.x / l, n.y / l, -n.z / l};
     return res;
 }
 
