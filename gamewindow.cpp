@@ -46,9 +46,9 @@ void GameWindow::initialize()
 
     this->vertices = initVertices(this->m_image.width(), this->m_image.height());
 
-//    entity = PlyEntity::load(":/gull.ply");
-//    entity->setPosition(0, 0, qGray(this->m_image.pixel((this->m_image.width() * (0 + 0.5f)), (this->m_image.height() * (0 + 0.5f)))) * 0.0008f);
-//    entity->setScale(0.1f);
+    //    entity = PlyEntity::load(":/gull.ply");
+    //    entity->setPosition(0, 0, qGray(this->m_image.pixel((this->m_image.width() * (0 + 0.5f)), (this->m_image.height() * (0 + 0.5f)))) * 0.0008f);
+    //    entity->setScale(0.1f);
 
     forest = new Forest(&m_image, 10);
 
@@ -66,6 +66,7 @@ void GameWindow::initialize()
     this->season = firstSeason++;
     this->windowId = this->season;
     this->onSeasonChange();
+    this->displayNormals = false;
 }
 
 void GameWindow::onSeasonChange()
@@ -135,7 +136,7 @@ void GameWindow::render(float delta)
     GLfloat ambientLight[] = { 0.2f, 0.2f, 0.2f, 1.0f };
     GLfloat diffuseLight[] = { 0.8f, 0.8f, 0.8, 1.0f };
     GLfloat specularLight[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-    GLfloat position[] = { -0.5f, 0.5f, -4.0f, 0.0f };
+    GLfloat position[] = { -0.5f, 0.5f, 4.0f, 0.0f };
 
     // Assign created components to GL_LIGHT0
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
@@ -144,6 +145,7 @@ void GameWindow::render(float delta)
     glLightfv(GL_LIGHT0, GL_POSITION, position);
 
     drawTriangles();
+    drawNormals();
 
     snow->update(delta);
     snow->draw(delta);
@@ -155,7 +157,7 @@ void GameWindow::render(float delta)
     spring->draw(delta);
     ++m_frame;
 
-//    entity->draw(delta);
+    //    entity->draw(delta);
     forest->draw(delta);
 }
 
@@ -199,6 +201,9 @@ void GameWindow::keyPressEvent(QKeyEvent *event)
         break;
     case Qt::Key_Tab:
         qApp->exit();
+        break;
+    case Qt::Key_Space:
+        displayNormals = !displayNormals;
         break;
     case 'Z':
         camera->scale(0.10f, 0.10f, 0);
@@ -248,10 +253,31 @@ void GameWindow::drawTriangles()
         } else {
             glColor3f(0.9, 0.8, 0.9);
         }
-        glVertex3f(vertices[var], vertices[var + 1], vertices[var + 2]);
         glNormal3f(normals[var / 3]->x, normals[var / 3]->y, normals[var / 3]->z);
+        glVertex3f(vertices[var], vertices[var + 1], vertices[var + 2]);
     }
     glEnd();
+}
+
+void GameWindow::drawNormals()
+{
+    if(displayNormals) {
+        glColor3f(1, 0, 0);
+        int countX = m_image.width();
+        int countY = m_image.height();
+        int count = countX * countY * 3 * 2 + countX * 3 + 3;
+        glBegin(GL_LINES);
+        float n = 0.01;
+#pragma omp for schedule(dynamic)
+        for (int var = 0; var < count - 9; var += 3) {
+
+            glVertex3f(vertices[var], vertices[var + 1], vertices[var + 2]);
+            glVertex3f((vertices[var] + normals[var / 3]->x*n),
+                    (vertices[var + 1] + normals[var / 3]->y*n),
+                    (vertices[var + 2] + normals[var / 3]->z*n));
+        }
+        glEnd();
+    }
 }
 
 QString GameWindow::serialize()
@@ -326,17 +352,12 @@ GLfloat *GameWindow::initVertices(GLint countX, GLint countY)
         p2.x = array[var+3]; p2.y = array[var+4]; p2.z = array[var+5];
         p3.x = array[var+6]; p3.y = array[var+7]; p3.z = array[var+8];
         std::vector<float> n;
-        if(p1.x == p2.x && p1.y < p2.y) {
-            n = Utils::getNormal(p1, p2, p3);
-        } else if(p1.x != p2.x && p1.y > p2.y) {
-            n = Utils::getNormal(p1, p3, p2);
-        } else if(p1.x == p2.x && p1.y > p2.y){
-            n = Utils::getNormal(p1, p3, p2);
-        } else {
-            n = Utils::getNormal(p1, p2, p3);
-        }
+        point *p = new point();
+        n = Utils::getNormal(p1, p2, p3);
+        p->x = n[0]; p->y = n[1]; p->z = n[2];
 
-        point *p = new point(); p->x = n[0]; p->y = n[1]; p->z = n[2];
+        if(p->z < 0) p->z *= -1;
+
         normals.push_back(p);
     }
     return array;

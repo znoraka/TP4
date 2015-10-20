@@ -31,6 +31,8 @@ public:
     void keyPressEvent(QKeyEvent *event);
 
     void drawTriangles();
+    void drawNormals();
+
     void displayTriangles();
     void displayLines();
     void displayTrianglesC();
@@ -81,6 +83,8 @@ private:
     int windowId;
     PlyEntity *entity;
     Forest *forest;
+
+    bool displayNormals;
 
     int carte=1;
 
