@@ -11,13 +11,13 @@
 - La sauvegarde des attributs de chaque saison se fait de la sorte :
 
 	  QVector<data *> Drought::attributes()
-	  {
-	    	QVector<data *> att;
-	    	att.push_back(ResourceManager::FLOAT(&yellow));
-	    	att.push_back(ResourceManager::FLOAT(&snowHeight));
-	    	att.push_back(ResourceManager::BOOL(&isActive));
-	    	return att;
-	  }
+	{
+	    QVector<data *> att;
+	    att.push_back(ResourceManager::FLOAT(&yellow));
+	    att.push_back(ResourceManager::FLOAT(&snowHeight));
+	    att.push_back(ResourceManager::BOOL(&isActive));
+	    return att;
+	}
 
 On retourne un tableau de pointeurs vers les attributs, ce qui permet de les sauvegarder simplement avec leur valeur, mais cela permet également de les affecter lors du chargement.
 
