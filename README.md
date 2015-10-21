@@ -10,14 +10,14 @@
 
 - La sauvegarde des attributs de chaque saison se fait de la sorte :
 
-  QVector<data *> Drought::attributes()
-  {
-    QVector<data *> att;
-    att.push_back(ResourceManager::FLOAT(&yellow));
-    att.push_back(ResourceManager::FLOAT(&snowHeight));
-    att.push_back(ResourceManager::BOOL(&isActive));
-    return att;
-  }
+	  QVector<data *> Drought::attributes()
+	  {
+	    	QVector<data *> att;
+	    	att.push_back(ResourceManager::FLOAT(&yellow));
+	    	att.push_back(ResourceManager::FLOAT(&snowHeight));
+	    	att.push_back(ResourceManager::BOOL(&isActive));
+	    	return att;
+	  }
 
 On retourne un tableau de pointeurs vers les attributs, ce qui permet de les sauvegarder simplement avec leur valeur, mais cela permet également de les affecter lors du chargement.
 
@@ -45,4 +45,6 @@ Exemple de fonction permettant le chargement et la sauvegarde d'un float
 
 
 - En plus du fichier de l'arbre, j'ai ajouté un bateau pour l'hiver et des oiseaux en été. Ils ont respectivement 13 000 et 15 000 vertices, ce qui impact grandement les performances, il est conseillé de fermer autres fenêtres pour profiter d'un nombre d'image par secondes maximal
+![alt tag](./birds.png)
 - Le bateau se promène sur la map dès qu'il y a assez d'eau en évitant au maximum les montagnes, il se tourne dans le sens de sa direction.
+- ![alt tag](./boat.png)
