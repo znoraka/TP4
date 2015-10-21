@@ -137,27 +137,29 @@ void RainParticles::draw(float delta)
                     glVertex3f(p4.x, p4.y, p4.z);
                 }
 
-                if(i == -50) {
-                    glVertex3f(-0.5, p3.y, z);
-                    glVertex3f(-0.5, p1.y, qGray(image->pixel(0, (fmax(j - 1 + 50, 0)) * 240 * 0.01)) * 0.0008);
-                    glVertex3f(-0.5, p1.y, p1.z);
-                    glVertex3f(-0.5, p3.y, p4.z);
-                } else if (i == 49) {
-                    glVertex3f(0.5, p3.y, p3.z);
-                    glVertex3f(0.5, p1.y, p2.z);
-                    glVertex3f(0.5, p1.y, z);
-                    glVertex3f(0.5, p3.y, z);
-                }
-                if(j == -50) {
-                    glVertex3f(p1.x, -0.5, z);
-                    glVertex3f(p3.x, -0.5, z);
-                    glVertex3f(p3.x, -0.5, p2.z);
-                    glVertex3f(p1.x, -0.5, p1.z);
-                } else if(j == 49) {
-                    glVertex3f(p1.x, 0.5, p4.z);
-                    glVertex3f(p3.x, 0.5, p3.z);
-                    glVertex3f(p3.x, 0.5, z);
-                    glVertex3f(p1.x, 0.5, z);
+                if( z < waterHeight) {
+                    if(i == -50) {
+                        glVertex3f(-0.5, p3.y, z);
+                        glVertex3f(-0.5, p1.y, qGray(image->pixel(0, (fmax(j - 1 + 50, 0)) * 240 * 0.01)) * 0.0008);
+                        glVertex3f(-0.5, p1.y, p1.z);
+                        glVertex3f(-0.5, p3.y, p4.z);
+                    } else if (i == 49) {
+                        glVertex3f(0.5, p3.y, p3.z);
+                        glVertex3f(0.5, p1.y, p2.z);
+                        glVertex3f(0.5, p1.y, z);
+                        glVertex3f(0.5, p3.y, z);
+                    }
+                    if(j == -50) {
+                        glVertex3f(p1.x, -0.5, z);
+                        glVertex3f(p3.x, -0.5, z);
+                        glVertex3f(p3.x, -0.5, p2.z);
+                        glVertex3f(p1.x, -0.5, p1.z);
+                    } else if(j == 49) {
+                        glVertex3f(p1.x, 0.5, p4.z);
+                        glVertex3f(p3.x, 0.5, p3.z);
+                        glVertex3f(p3.x, 0.5, z);
+                        glVertex3f(p1.x, 0.5, z);
+                    }
                 }
             }
         }
